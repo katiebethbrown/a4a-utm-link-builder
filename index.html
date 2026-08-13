@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTM Link Builder</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --ink: #1b1b28;
+    --muted: #6a7280;
+    --line: #d9dde3;
+    --accent: #2f6fed;
+    --accent-ink: #ffffff;
+    --good: #147d4a;
+    --warn: #b23b3b;
+    --code-bg: #0f1420;
+    --code-ink: #e6edf7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  label { display: block; font-weight: 600; font-size: 14px; margin: 0 0 4px; }
+  .hint { color: var(--muted); font-weight: 400; font-size: 12px; margin: 0 0 8px; }
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  input[type=text], select {
+    width: 100%;
+    font-size: 15px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  input[type=text]:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+  .req { color: var(--warn); }
+  .row2 { display: grid; grid-template-columns: 1fr; gap: 0; }
+  .url-prefix { display: flex; align-items: stretch; }
+  .url-prefix .pfx {
+    display: flex; align-items: center;
+    padding: 0 12px;
+    background: #eef1f5;
+    border: 1px solid var(--line);
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    color: var(--muted);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .url-prefix input { border-radius: 0 8px 8px 0; }
+  .out {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    word-break: break-all;
+    line-height: 1.6;
+  }
+  .out .k { color: #7fd1ff; }
+  .out .v { color: #ffd479; }
+  .out .base { color: #b9f6c8; }
+  .actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button:active { transform: translateY(1px); }
+  .copied { color: var(--good); font-size: 13px; align-self: center; font-weight: 600; }
+  .params { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .params code { background: #eef1f5; padding: 1px 6px; border-radius: 5px; color: var(--ink); }
+  .warnmsg { color: var(--warn); font-size: 13px; margin-top: 8px; }
+  details { margin-top: 6px; font-size: 13px; color: var(--muted); }
+  details summary { cursor: pointer; font-weight: 600; }
+  .custom-toggle { font-size: 12px; color: var(--accent); cursor: pointer; margin-top: 6px; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>UTM Link Builder</h1>
+  <p class="sub">Builds standardized tracking links. Every value is auto-lowercased and hyphenated, and source options follow the medium you pick.</p>
+
+  <div class="card">
+    <div class="field">
+      <label>Destination URL <span class="req">*</span></label>
+      <div class="hint">The page you are sending people to. Must have the HubSpot tracking code.</div>
+      <div class="url-prefix">
+        <span class="pfx">https://</span>
+        <input type="text" id="baseUrl" placeholder="automattic.com/for-agencies/signup" value="automattic.com/for-agencies/signup">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Campaign <span class="req">*</span></label>
+      <div class="hint">Must match the HubSpot campaign name exactly. Pick a known one or type it.</div>
+      <input type="text" id="campaign" list="campaignList" placeholder="2026-digital-summit-minneapolis" value="2026-digital-summit-minneapolis">
+      <datalist id="campaignList"></datalist>
+    </div>
+
+    <div class="field">
+      <label>Medium <span class="req">*</span></label>
+      <div class="hint">The channel category. This is the bucket you compare against email, social, and paid.</div>
+      <select id="medium"></select>
+    </div>
+
+    <div class="field">
+      <label>Source <span class="req">*</span></label>
+      <div class="hint">The specific origin within that channel.</div>
+      <select id="source"></select>
+      <span class="custom-toggle" id="sourceCustomToggle">or enter a custom source</span>
+      <input type="text" id="sourceCustom" placeholder="custom source" style="display:none; margin-top:8px;">
+    </div>
+
+    <div class="field">
+      <label>Content <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <div class="hint">Tells apart multiple links to the same page. e.g. signage-a, hero-cta, qr-v1.</div>
+      <input type="text" id="content" placeholder="signage-a">
+    </div>
+
+    <div class="field">
+      <label>Term <span style="font-weight:400;color:var(--muted)">(optional, paid keywords only)</span></label>
+      <input type="text" id="term" placeholder="usually auto-filled by the ad platform">
+    </div>
+  </div>
+
+  <div class="card">
+    <label style="margin-bottom:10px;">Your tracking link</label>
+    <div class="out" id="output"></div>
+    <div class="warnmsg" id="warn"></div>
+    <div class="actions">
+      <button class="primary" id="copyBtn">Copy link</button>
+      <span class="copied" id="copied" style="display:none;">Copied</span>
+    </div>
+    <details>
+      <summary>Parameter breakdown</summary>
+      <div class="params" id="breakdown"></div>
+    </details>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   EDIT YOUR VOCABULARY HERE
+   Keep everything lowercase with hyphens.
+   ============================================================ */
+const MEDIUMS = [
+  "email",
+  "social",
+  "paid-social",
+  "cpc",
+  "display",
+  "event",
+  "partner",
+  "referral",
+  "sms"
+];
+
+const SOURCES_BY_MEDIUM = {
+  "email":       ["newsletter", "product-update", "sales-outreach", "lifecycle"],
+  "social":      ["linkedin", "x", "facebook", "instagram", "youtube"],
+  "paid-social": ["linkedin", "x", "facebook", "instagram", "youtube"],
+  "cpc":         ["google", "bing"],
+  "display":     ["google-display", "stackadapt"],
+  "event":       ["booth", "booth-qr", "session-slide", "badge-scan", "printed-flyer"],
+  "partner":     ["wpengine", "cloudways"],
+  "referral":    ["techcrunch"],
+  "sms":         ["broadcast", "lifecycle"]
+};
+
+// Known HubSpot campaigns for the autocomplete (optional convenience).
+const KNOWN_CAMPAIGNS = [
+  "2026-digital-summit-minneapolis",
+  "2026-agency-onboarding"
+];
+/* ============================================================ */
+
+// Turn any input into a clean slug: lowercase, hyphens, no junk.
+function slug(s) {
+  return (s || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, "-")      // spaces and underscores become hyphens
+    .replace(/[^a-z0-9-]/g, "")   // strip anything not a-z, 0-9, hyphen
+    .replace(/-+/g, "-")          // collapse repeated hyphens
+    .replace(/^-|-$/g, "");       // trim leading/trailing hyphens
+}
+
+const $ = (id) => document.getElementById(id);
+
+function initVocab() {
+  const med = $("medium");
+  MEDIUMS.forEach(m => {
+    const o = document.createElement("option");
+    o.value = m; o.textContent = m;
+    med.appendChild(o);
+  });
+  const dl = $("campaignList");
+  KNOWN_CAMPAIGNS.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
+    dl.appendChild(o);
+  });
+  populateSources();
+}
+
+function populateSources() {
+  const med = $("medium").value;
+  const src = $("source");
+  src.innerHTML = "";
+  (SOURCES_BY_MEDIUM[med] || []).forEach(s => {
+    const o = document.createElement("option");
+    o.value = s; o.textContent = s;
+    src.appendChild(o);
+  });
+  render();
+}
+
+let useCustomSource = false;
+function toggleCustomSource() {
+  useCustomSource = !useCustomSource;
+  $("source").style.display = useCustomSource ? "none" : "block";
+  $("sourceCustom").style.display = useCustomSource ? "block" : "none";
+  $("sourceCustomToggle").textContent = useCustomSource ? "use the standard list" : "or enter a custom source";
+  render();
+}
+
+function currentSource() {
+  return useCustomSource ? slug($("sourceCustom").value) : $("source").value;
+}
+
+function render() {
+  const base = $("baseUrl").value.trim().replace(/^https?:\/\//i, "").replace(/\/+$/, "");
+  const params = [
+    ["utm_campaign", slug($("campaign").value)],
+    ["utm_source", currentSource()],
+    ["utm_medium", $("medium").value],
+    ["utm_content", slug($("content").value)],
+    ["utm_term", slug($("term").value)]
+  ].filter(([, v]) => v);
+
+  const query = params.map(([k, v]) => k + "=" + v).join("&");
+  const fullUrl = "https://" + base + (query ? "?" + query : "");
+
+  // Colored output
+  let html = '<span class="base">https://' + base + '</span>';
+  if (query) {
+    html += '<span class="k">?</span>';
+    html += params.map(([k, v], i) =>
+      (i ? '<span class="k">&</span>' : '') +
+      '<span class="k">' + k + '=</span><span class="v">' + v + '</span>'
+    ).join("");
+  }
+  $("output").innerHTML = html;
+  $("output").dataset.url = fullUrl;
+
+  // Breakdown
+  $("breakdown").innerHTML = params.map(([k, v]) =>
+    '<div><code>' + k + '</code> = ' + v + '</div>'
+  ).join("");
+
+  // Warnings
+  const warns = [];
+  if (!base) warns.push("Add a destination URL.");
+  if (!slug($("campaign").value)) warns.push("Add a campaign.");
+  if (!currentSource()) warns.push("Add a source.");
+  $("warn").textContent = warns.join(" ");
+}
+
+function copyLink() {
+  const url = $("output").dataset.url || "";
+  navigator.clipboard.writeText(url).then(() => {
+    const c = $("copied");
+    c.style.display = "inline";
+    setTimeout(() => { c.style.display = "none"; }, 1600);
+  });
+}
+
+// Wire up
+document.addEventListener("DOMContentLoaded", () => {
+  initVocab();
+  $("medium").addEventListener("change", populateSources);
+  ["baseUrl", "campaign", "source", "sourceCustom", "content", "term"].forEach(id => {
+    $(id).addEventListener("input", render);
+    $(id).addEventListener("change", render);
+  });
+  $("sourceCustomToggle").addEventListener("click", toggleCustomSource);
+  $("copyBtn").addEventListener("click", copyLink);
+  render();
+});
+</script>
+</body>
+</html>
