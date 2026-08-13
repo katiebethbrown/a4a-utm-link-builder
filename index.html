@@ -135,7 +135,8 @@
       <div class="hint">The specific origin within that channel.</div>
       <select id="source"></select>
       <span class="custom-toggle" id="sourceCustomToggle">or enter a custom source</span>
-      <input type="text" id="sourceCustom" placeholder="custom source" style="display:none; margin-top:8px;">
+      <input type="text" id="sourceCustom" list="sourceList" placeholder="custom source" style="display:none; margin-top:8px;">
+      <datalist id="sourceList"></datalist>
     </div>
 
     <div class="field">
@@ -199,6 +200,12 @@ const KNOWN_CAMPAIGNS = [
   "2026-digital-summit-minneapolis",
   "2026-agency-onboarding"
 ];
+
+// Mediums whose source is open-ended (free text instead of a fixed dropdown).
+// Any values listed in SOURCES_BY_MEDIUM above still show up as suggestions.
+const FREETEXT_SOURCE_MEDIUMS = [
+  "partner"   // source = the agency name, which varies every time
+];
 /* ============================================================ */
 
 // Turn any input into a clean slug: lowercase, hyphens, no junk.
@@ -232,13 +239,43 @@ function initVocab() {
 
 function populateSources() {
   const med = $("medium").value;
+  const isFreetext = FREETEXT_SOURCE_MEDIUMS.includes(med);
+  const suggestions = SOURCES_BY_MEDIUM[med] || [];
+
+  // Fill the dropdown of standard sources
   const src = $("source");
   src.innerHTML = "";
-  (SOURCES_BY_MEDIUM[med] || []).forEach(s => {
+  suggestions.forEach(s => {
     const o = document.createElement("option");
     o.value = s; o.textContent = s;
     src.appendChild(o);
   });
+
+  // Mirror the same values as autocomplete suggestions for the free-text input
+  const dl = $("sourceList");
+  dl.innerHTML = "";
+  suggestions.forEach(s => {
+    const o = document.createElement("option");
+    o.value = s;
+    dl.appendChild(o);
+  });
+
+  if (isFreetext) {
+    // Force the free-text input, hide the dropdown and the toggle
+    useCustomSource = true;
+    $("source").style.display = "none";
+    $("sourceCustom").style.display = "block";
+    $("sourceCustom").placeholder = "agency name, e.g. " + (suggestions[0] || "partner-name");
+    $("sourceCustomToggle").style.display = "none";
+  } else {
+    // Standard behavior: dropdown with an optional custom toggle
+    useCustomSource = false;
+    $("source").style.display = "block";
+    $("sourceCustom").style.display = "none";
+    $("sourceCustom").placeholder = "custom source";
+    $("sourceCustomToggle").style.display = "inline-block";
+    $("sourceCustomToggle").textContent = "or enter a custom source";
+  }
   render();
 }
 
