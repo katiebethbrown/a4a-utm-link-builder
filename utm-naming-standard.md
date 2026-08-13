@@ -86,6 +86,14 @@ https://automattic.com/for-agencies/signup?utm_campaign=2026-agency-onboarding&u
 https://automattic.com/for-agencies/signup?utm_campaign=2026-agency-onboarding&utm_source=linkedin&utm_medium=social&utm_content=founder-post
 ```
 
+**Partner referral (A4A partner program):**
+
+```
+https://automattic.com/for-agencies/?utm_campaign=a4a-partners&utm_source=evolvedigital&utm_medium=partner&utm_content=homepage-badge
+```
+
+Campaign = the shared, evergreen `a4a-partners` HubSpot campaign, not one per partner, medium = `partner`, source = the partner's own name, content = which placement on their site.
+
 ## Quick decision guide
 
 - **What channel is this?** → that is your `medium` (from the fixed list).
