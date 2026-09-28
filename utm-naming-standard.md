@@ -69,7 +69,7 @@ Free text, and usually populated automatically by the ad platform. Rarely set by
 **In-person event (this one):**
 
 ```
-https://automattic.com/for-agencies/signup?utm_campaign=2026-digital-summit-minneapolis&utm_source=booth-qr&utm_medium=event&utm_content=signage-a
+https://agencies.automattic.com/signup?utm_campaign=2026-digital-summit-minneapolis&utm_source=booth-qr&utm_medium=event&utm_content=signage-a
 ```
 
 Campaign = the event, medium = `event` (rolls up all events over time), source = `booth-qr` (the placement), content = `signage-a` (which sign).
@@ -77,13 +77,13 @@ Campaign = the event, medium = `event` (rolls up all events over time), source =
 **Email newsletter:**
 
 ```
-https://automattic.com/for-agencies/signup?utm_campaign=2026-agency-onboarding&utm_source=newsletter&utm_medium=email&utm_content=header-cta
+https://agencies.automattic.com/signup?utm_campaign=2026-agency-onboarding&utm_source=newsletter&utm_medium=email&utm_content=header-cta
 ```
 
 **Organic LinkedIn post:**
 
 ```
-https://automattic.com/for-agencies/signup?utm_campaign=2026-agency-onboarding&utm_source=linkedin&utm_medium=social&utm_content=founder-post
+https://agencies.automattic.com/signup?utm_campaign=2026-agency-onboarding&utm_source=linkedin&utm_medium=social&utm_content=founder-post
 ```
 
 **Partner referral (A4A partner program):**
