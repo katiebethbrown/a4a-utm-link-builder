@@ -56,7 +56,7 @@ Example with everything: `https://a4a-utm-link-builder.view.fast/?campaign=2026Q
 
 ## Hosting
 
-The live copy is published to Spacefast at the live link above. A GitHub Pages copy may still exist at katiebethbrown.github.io/a4a-utm-link-builder, pending a decision to retire it.
+The live copy is published to Spacefast at the live link above. Edits to `main` go live only after they are republished there. The old GitHub Pages copy (katiebethbrown.github.io/a4a-utm-link-builder) was turned off on 2026-10-15, so update any link that still points to it.
 
 ## Files
 
