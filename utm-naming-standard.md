@@ -36,6 +36,7 @@ The key idea: **medium is the bucket you compare against email, social, and paid
 - `partner` — co-marketing or partner referrals
 - `referral` — another site linking to you
 - `sms` — text messages
+- `a4a-dashboard`: links in the A4A dashboard (promo banners, cards, in-product CTAs)
 
 Guard this list tightly. Never invent a new medium on the fly. If something genuinely does not fit, add it to this standard deliberately so everyone uses the same word.
 
@@ -51,6 +52,7 @@ Source is a small approved set *per medium*, not one universal list. It names th
 - **partner** → the partner's name, e.g. `wpengine`, `cloudways`
 - **referral** → the referring domain, e.g. `techcrunch`
 - **sms** → `broadcast`, `lifecycle`
+- **a4a-dashboard** → the placement in the dashboard, e.g. `overview`, `marketplace-pressable`
 
 Note for events: the event itself lives in `utm_campaign` (the HubSpot campaign), so do not repeat the event name in source. Use source for the specific placement instead.
 
@@ -93,6 +95,14 @@ https://automattic.com/for-agencies/?utm_campaign=a4a-partners&utm_source=evolve
 ```
 
 Campaign = the shared, evergreen `a4a-partners` HubSpot campaign, not one per partner, medium = `partner`, source = the partner's own name, content = which placement on their site.
+
+**A4A dashboard promo banner:**
+
+```
+https://agencies.automattic.com/signup?utm_campaign=2026q3-pressablehosting&utm_source=overview&utm_medium=a4a-dashboard
+```
+
+Medium = `a4a-dashboard` (rolls up every dashboard placement), source = where the banner sits. Only add `content` when one placement has two CTAs. Links that stay inside the dashboard don't need UTMs.
 
 ## Quick decision guide
 

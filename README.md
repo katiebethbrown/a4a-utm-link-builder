@@ -2,12 +2,12 @@
 
 A tiny, self-contained tool for building standardized UTM tracking links for HubSpot campaigns. One HTML file, no build step, no dependencies, no data sent anywhere (everything runs in the browser).
 
-**Live tool:** https://katiebethbrown.github.io/a4a-utm-link-builder/
+**Live tool:** https://a4a-utm-link-builder.view.fast/
 
 ## What it does
 
 - **Dependent dropdowns:** the source options change based on the medium you pick, so you can only choose valid combinations.
-- **Auto-formatting:** every value is lowercased and hyphenated as you type, so `Booth_Signage` becomes `booth-signage` on its own.
+- **Auto-formatting:** every value is lowercased and hyphenated as you type, so `Booth_Signage` becomes `booth-signage` on its own. The one exception is a campaign prefilled from a link (see below), which is kept exactly as given.
 - **Live, copy-ready link:** the tracking URL builds in real time with a one-click copy button.
 - **Campaign enforcement:** the campaign field is meant to match your HubSpot campaign name exactly, which is what makes attribution roll up correctly.
 
@@ -35,16 +35,28 @@ Three plain lists control everything:
 - `SOURCES_BY_MEDIUM` — the approved source values for each medium
 - `KNOWN_CAMPAIGNS` — campaign names that autocomplete in the campaign field
 
-Edit, commit, and the live site updates automatically. Keep every value lowercase with hyphens.
+Edit and commit, then republish `index.html` to Spacefast. The live site does not update on its own. Keep every value lowercase with hyphens.
 
-## Deploying with GitHub Pages
+## Prefilling from a link
 
-1. In the repo, go to **Settings > Pages**.
-2. Under **Source**, choose **Deploy from a branch**.
-3. Set the branch to **main** and the folder to **/ (root)**, then **Save**.
-4. Wait a minute or two. The tool publishes at the live link above.
+You can open the tool with fields already filled in by adding query parameters to the URL:
 
-Because the file is named `index.html`, it serves directly at the repo root URL with no extra path.
+https://a4a-utm-link-builder.view.fast/?campaign=2026Q4-WordCamp-Brasil
+
+| Parameter | Alias | Fills | Rules |
+|---|---|---|---|
+| `campaign` | `utm_campaign` | Campaign | Kept exactly as given, case included, so it matches the HubSpot campaign's UTM value literally. |
+| `medium` | `utm_medium` | Medium | Used only if it is in `MEDIUMS`. |
+| `source` | `utm_source` | Source | Used only if it is listed in `SOURCES_BY_MEDIUM` for the selected medium. |
+| `content` | `utm_content` | Content | Auto-formatted like typed input. |
+
+Invalid medium or source values are ignored and the default is used. If you edit a prefilled campaign by typing, the field goes back to normal auto-formatting.
+
+Example with everything: `https://a4a-utm-link-builder.view.fast/?campaign=2026Q4-WordCamp-Brasil&medium=event&source=booth-qr&content=signage-a`
+
+## Hosting
+
+The live copy is published to Spacefast at the live link above. A GitHub Pages copy may still exist at katiebethbrown.github.io/a4a-utm-link-builder, pending a decision to retire it.
 
 ## Files
 
