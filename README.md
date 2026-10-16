@@ -4,6 +4,8 @@ A tiny, self-contained tool for building standardized UTM tracking links for Hub
 
 **Live tool:** https://a4a-utm-link-builder.view.fast/
 
+**Naming standard:** [UTM Naming Standard on A4A University](https://a4auniversity.wordpress.com/hubspot-handbook/ops-admin/utm-naming-standard/) is the version to share with teammates.
+
 ## What it does
 
 - **Dependent dropdowns:** the source options change based on the medium you pick, so you can only choose valid combinations.
@@ -13,7 +15,7 @@ A tiny, self-contained tool for building standardized UTM tracking links for Hub
 
 ## Why it exists
 
-UTM values are case-sensitive and matched literally, so `Event`, `event`, and `events` become three separate rows in reporting. This tool enforces one consistent format by construction. The full convention it follows is documented in [utm-naming-standard.md](./utm-naming-standard.md).
+UTM values are case-sensitive and matched literally, so `Event`, `event`, and `events` become three separate rows in reporting. This tool enforces one consistent format by construction. The full convention it follows is documented in [utm-naming-standard.md](./utm-naming-standard.md) and published for the team on [A4A University](https://a4auniversity.wordpress.com/hubspot-handbook/ops-admin/utm-naming-standard/). When you change the vocabulary, update both.
 
 ## How to use it
 
